@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyKost App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Layanan Jasa Pindahan Barang</h1>
+    <form action="/request-moving" method="POST">
+        <label>Alamat Kos Lama (Asal):</label><br>
+        <textarea name="asal" required></textarea><br>
+        
+        <label>Alamat Kos Baru (Tujuan):</label><br>
+        <textarea name="tujuan" required></textarea><br><br>
+        
+        <button type="submit">Pesan Jasa Pindahan</button>
+    </form>
+    <hr>
+    <a href="/end-of-service">Selesaikan Layanan (Bayar & Rating)</a>
+</body>
+</html>

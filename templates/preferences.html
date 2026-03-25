@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cari Kost Idaman - MyKost</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body style="background-color: #FFFDF9; font-family: 'Poppins', sans-serif;">
+
+<nav>
+    <div class="logo">MYKOST.ID</div>
+    <div>
+        <a href="/profile" style="text-decoration: none; color: #333; margin-right: 20px;">Profil Saya</a>
+        <a href="/logout" style="color: #FF8C42; text-decoration: none; font-weight: 600;">Keluar</a>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 800px; margin: 60px auto; padding: 0 20px;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="font-size: 2.5rem; color: #333;">Cari Kost <span style="color: #FF8C42;">Idaman</span></h1>
+        <p style="color: #666;">Halo, <strong>{{ user.full_name }}</strong>! Sesuaikan kriteria kost yang Anda inginkan.</p>
+    </div>
+
+    <div class="auth-card" style="width: 100%; max-width: 100%; padding: 40px; border-radius: 20px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+        <form action="/search-kost" method="POST">
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 10px;">Lokasi (Kota/Area)</label>
+                <input type="text" name="lokasi" placeholder="Misal: Bekasi Barat, Tambun, dsb..." required 
+                       style="width: 100%; padding: 14px; border: 1.5px solid #EAEAEA; border-radius: 12px; font-family: inherit;">
+                <small style="color: #999; font-size: 0.8rem; display: block; mt: 5px;">Contoh: Dekat Unisma, Harapan Indah</small>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 15px;">Fasilitas Utama</label>
+                <select name="fasilitas" style="width: 100%; padding: 14px; border: 1.5px solid #EAEAEA; border-radius: 12px; background: white; font-family: inherit; cursor: pointer;">
+                    <option value="AC + Kamar Mandi Dalam">❄️ AC + Kamar Mandi Dalam</option>
+                    <option value="Wifi + Laundry">📶 Wifi + Laundry</option>
+                    <option value="Parkir Mobil">🚗 Parkir Mobil</option>
+                    <option value="Akses 24 Jam">🕒 Akses 24 Jam</option>
+                </select>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <button type="submit" class="btn-primary" style="padding: 18px; font-size: 1.1rem; border: none; border-radius: 12px; background: #333; color: white; cursor: pointer; font-weight: 600; transition: 0.3s;">
+                    🔍 CARI KOST SEKARANG
+                </button>
+                
+                <a href="/" style="text-align: center; text-decoration: none; color: #999; font-size: 0.9rem; font-weight: 600; margin-top: 10px;">
+                    ← KEMBALI KE BERANDA
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center; background: #F4F4F4; padding: 15px; border-radius: 12px; color: #555; font-size: 0.85rem;">
+        Logged in as: <strong>{{ user.role }}</strong> | Username: <em>{{ user.username if user.username else 'admin' }}</em>
+    </div>
+</div>
+
+<footer style="margin-top: 100px; text-align: center; color: #BBB; font-size: 0.8rem; padding-bottom: 40px;">
+    &copy; 2026 Software Engineering - Kelompok 8 (Project MyKost)
+</footer>
+
+</body>
+</html>

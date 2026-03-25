@@ -1,0 +1,128 @@
+:root {
+    --bg-cream: #FFFDF9;
+    --primary-orange: #FF8C42;  /* Warna Utama */
+    --primary-hover: #E6762D;   /* Warna saat tombol ditekan */
+    --accent-amber: #FFD166;
+    --charcoal: #333333;        /* Warna Teks */
+    --white: #FFFFFF;
+    --soft-gray: #EEEEEE;
+    --text-muted: #888888;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+html { scroll-behavior: smooth; }
+body { background-color: var(--bg-cream); color: var(--charcoal); line-height: 1.6; }
+
+/* NAVBAR - Dibuat lebih tipis & modern */
+nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 8%; background: var(--white);
+    position: sticky; top: 0; z-index: 1000; 
+    box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+}
+.logo { font-size: 1.6rem; font-weight: 800; color: var(--primary-orange); letter-spacing: -1px; }
+nav a { text-decoration: none; color: var(--charcoal); margin-left: 25px; font-weight: 600; font-size: 0.95rem; transition: 0.3s; }
+nav a:hover { color: var(--primary-orange); }
+
+/* HERO SECTION */
+.hero {
+    min-height: 85vh; display: flex; align-items: center; justify-content: space-between;
+    padding: 40px 8%; background: linear-gradient(135deg, #FFF9F0 0%, #FFE8D6 100%);
+}
+.hero-text { flex: 1; padding-right: 50px; }
+.hero-text h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; color: var(--charcoal); font-weight: 800; }
+.hero-text span { color: var(--primary-orange); }
+.hero-text p { font-size: 1.1rem; color: #555; margin-bottom: 30px; }
+
+/* AUTH BOX (Login & Register) - Diperhalus */
+.auth-card {
+    background: var(--white); padding: 40px; border-radius: 24px;
+    width: 100%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+.auth-card h3 { font-size: 1.5rem; margin-bottom: 10px; font-weight: 700; }
+
+/* Input Styling - Efek Fokus Orange */
+.auth-card input, .auth-card select, .auth-card textarea {
+    width: 100%; padding: 14px; margin-bottom: 18px; 
+    border: 1.5px solid #EAEAEA; border-radius: 12px;
+    font-size: 0.95rem; outline: none; transition: 0.3s;
+}
+.auth-card input:focus, .auth-card select:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 4px rgba(255, 140, 66, 0.1);
+}
+
+/* Tombol Utama */
+.btn-primary {
+    width: 100%; padding: 15px; background: var(--primary-orange);
+    color: white; border: none; border-radius: 12px; 
+    font-weight: 700; font-size: 1rem; cursor: pointer;
+    transition: 0.3s; box-shadow: 0 8px 20px rgba(255, 140, 66, 0.2);
+}
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 140, 66, 0.3);
+}
+
+/* CARDS SECTION - Efek Mamikos */
+.section { padding: 100px 8%; }
+.section h2 { font-size: 2rem; font-weight: 800; margin-bottom: 10px; }
+.section h2 span { color: var(--primary-orange); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
+
+.card {
+    background: white; border-radius: 20px; overflow: hidden; 
+    border: 1px solid var(--soft-gray); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.card:hover { 
+    transform: translateY(-12px); 
+    box-shadow: 0 25px 50px rgba(0,0,0,0.1); 
+    border-color: transparent;
+}
+.card-img { 
+    height: 200px; background: var(--accent-amber); 
+    display: flex; align-items: center; justify-content: center; font-size: 4rem; 
+}
+.card-content { padding: 25px; }
+.badge { 
+    background: #FFF0E5; color: var(--primary-orange); 
+    padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+}
+
+/* FOOTER */
+footer { 
+    background: var(--charcoal); color: rgba(255,255,255,0.7); 
+    padding: 60px 8%; text-align: center; font-size: 0.9rem;
+}
+footer strong { color: white; }
+
+/* Responsivitas Mobile */
+@media (max-width: 768px) {
+    .hero { flex-direction: column; text-align: center; height: auto; padding-top: 60px; }
+    .hero-text { padding-right: 0; margin-bottom: 40px; }
+    .hero-text h1 { font-size: 2.5rem; }
+    .auth-card { width: 100%; }
+}
+
+/* Container pembungkus kartu */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* Detail spesifik kartu agar mirip Mamikos */
+.card-content h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Nama kost yang panjang akan jadi titik-titik (...) */
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}

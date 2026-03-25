@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Pencarian MyKost - {{ lokasi }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { background-color: #FFFDF9; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 20px 50px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+        }
+        .logo { font-weight: 800; color: #333; font-size: 1.5rem; letter-spacing: -1px; }
+
+        .kost-card {
+            display: flex;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            transition: 0.3s;
+            height: 245px; 
+        }
+        .kost-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        
+        .img-container { width: 30%; position: relative; }
+        .info-container { 
+            width: 45%; padding: 20px; border-right: 1px dashed #ddd; 
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .map-container { width: 25%; background: #f9f9f9; position: relative; z-index: 1; }
+        
+        .price-tag { font-size: 1.3rem; font-weight: 800; color: #333; }
+        .badge-type { 
+            display: inline-block; padding: 4px 10px; border-radius: 6px; 
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase; 
+            background: #f0f0f0; color: #666;
+        }
+
+        .btn-pilih {
+            display: block;
+            text-align: center;
+            background-color: #333;
+            color: #ffffff !important;
+            padding: 12px 0;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-pilih:hover {
+            background-color: #FF8C42;
+            box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4);
+        }
+
+        span.lokasi-text { color: #FF8C42; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">MYKOST<span style="color: #FF8C42;">.ID</span></div>
+    <div style="display: flex; gap: 20px; align-items: center;">
+        <span style="font-size: 0.9rem; font-weight: 600;">📍 {{ lokasi }}</span>
+        <a href="/preferences" style="color: #333; text-decoration: none; font-size: 0.85rem; border: 1.5px solid #333; padding: 6px 18px; border-radius: 20px;">Cari Lagi</a>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
+    <h2 style="margin-bottom: 5px; font-weight: 800; font-size: 2rem;">Kost Pilihan di <span class="lokasi-text">{{ lokasi }}</span></h2>
+    <p style="color: #888; margin-bottom: 30px;">Ditemukan {{ kost_data|length }} properti yang sesuai kriteria Anda.</p>
+
+    {% for kost in kost_data %}
+    <div class="kost-card">
+        <div class="img-container" style="background-image: url('{{ kost.image }}'); background-size: cover; background-position: center;">
+            <div style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.75); color: white; padding: 5px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 600;">
+                Tersedia
+            </div>
+        </div>
+
+        <div class="info-container">
+            <div>
+                <span class="badge-type" style="background: #e8f5e9; color: #2e7d32;">Terverifikasi</span>
+                <h3 style="margin: 10px 0 5px 0; font-size: 1.2rem; color: #333; font-weight: 700;">{{ kost.nama }}</h3>
+                <p style="color: #777; font-size: 0.85rem; margin-bottom: 5px;">📍 {{ kost.alamat }}</p>
+                <p style="color: #999; font-size: 0.8rem; margin: 0;">Fasilitas: WiFi, AC, Laundry</p>
+            </div>
+            
+            <div>
+                <div class="price-tag">
+                    Rp {{ kost.harga }} <span style="font-size: 0.8rem; font-weight: 400; color: #888;">/ bulan</span>
+                </div>
+                <a href="{{ url_for('pilih_agen', kost_id=kost.id) }}" class="btn-pilih">
+                    ⚡ PILIH KOST INI
+                </a>
+            </div>
+        </div>
+
+        <div class="map-container" id="map-{{ loop.index }}"></div>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const locations = [
+        [-6.2383, 106.9756], [-6.2410, 106.9921], [-6.2550, 107.0110], 
+        [-6.2210, 106.9650], [-6.2610, 106.9850], [-6.2300, 107.0001],
+        [-6.2450, 106.9550], [-6.2100, 106.9990], [-6.2700, 107.0200]
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+        {% for kost in kost_data %}
+            var map = L.map('map-{{ loop.index }}', {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                scrollWheelZoom: false
+            }).setView(locations[{{ loop.index0 }} % locations.length], 15);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.marker(locations[{{ loop.index0 }} % locations.length]).addTo(map);
+        {% endfor %}
+    });
+</script>
+
+</body>
+</html>

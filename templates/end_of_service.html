@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selesaikan Layanan - MyKost Kelompok 8</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h2>MYKOST CHECKOUT</h2>
+</header>
+
+<div class="container" style="padding: 0; background: none; box-shadow: none; border: none; overflow: visible;">
+    
+    {% if success %}
+        <div class="receiptify-container">
+            <div class="success-card">
+                
+                <div class="receipt-header">
+                    <div class="success-icon-container">
+                        <span>✓</span>
+                    </div>
+                    <h1 style="color: #28a745; margin-bottom: 5px; font-size: 1.6em;">Pembayaran Berhasil!</h1>
+                    <p style="color: #888; font-size: 0.9em;">Terima kasih, pembayaran Anda telah divalidasi oleh sistem.</p>
+                </div>
+                
+                <hr class="receipt-divider">
+                
+                <div class="receipt-details">
+                    <div class="detail-row">
+                        <span>Metode Pembayaran</span>
+                        <span class="value">{{ metode if metode else 'E-Wallet' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Status</span>
+                        <span class="value status-paid">LUNAS (PAID)</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>ID Transaksi</span>
+                        <span class="value" style="font-family: monospace;">#MK-Kel8-20260325</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Waktu</span>
+                        <span class="value">25 Maret 2026, 14:30 WIB</span>
+                    </div>
+                    <div class="detail-row" style="margin-top: 15px; border-top: 1px solid var(--soft-border); padding-top: 10px;">
+                        <span>Rating Anda</span>
+                        <span class="value rating">
+                            {# Filter |default('5')|int untuk mencegah error jika rating kosong #}
+                            {% set star_count = rating|default('5')|int %}
+                            {% for i in range(star_count) %}⭐{% endfor %}
+                        </span>
+                    </div>
+                </div>
+
+                <div style="background: #FFF9EF; padding: 15px; border-radius: 12px; margin-top: 20px; font-style: italic; font-size: 0.85em; border: 1px solid var(--soft-border); color: #555;">
+                    "{{ feedback if feedback else 'Layanan Agen Budi sangat membantu dan cepat!' }}"
+                </div>
+
+                <button onclick="window.location.href='/'" style="margin-top: 35px;">KEMBALI KE BERANDA</button>
+
+                <div class="receipt-edge"></div>
+            </div>
+        </div>
+
+    {% else %}
+        <div style="padding: 35px; background: white; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <h1>Selesaikan Layanan</h1>
+            <h3>Ringkasan & Pembayaran Akhir</h3>
+
+            <div class="payment-card" style="background: #FFF9EF; border: 2px solid var(--soft-border); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 30px;">
+                <p style="margin: 0; color: #888; font-size: 0.9em;">Total Biaya:</p>
+                <div style="font-size: 2.2em; font-weight: 700; color: var(--primary-brown); margin: 5px 0;">Rp 1.550.000</div>
+                <p style="font-size: 0.8em; color: var(--accent-orange); font-weight: 600;">(Sewa Kost + Jasa Pindahan Kel-8)</p>
+            </div>
+            
+            <form action="/process-payment" method="POST">
+                <label>Pilih E-Wallet</label>
+                <select name="metode_bayar" required style="border: 2px solid var(--accent-orange); font-weight: 600;">
+                    <option value="" disabled selected>-- Pilih Metode --</option>
+                    <option value="GoPay">GoPay (Promo Cashback)</option>
+                    <option value="Dana">Dana</option>
+                    <option value="OVO">OVO</option>
+                    <option value="ShopeePay">ShopeePay</option>
+                </select>
+
+                <label>Rating untuk Agen (1-5)</label>
+                <div style="text-align: center; font-size: 1.5em; margin: 10px 0;">⭐⭐⭐⭐⭐</div>
+                <input type="number" name="rating" min="1" max="5" value="5" required>
+
+                <label>Ulasan / Testimoni</label>
+                <textarea name="feedback" placeholder="Ceritakan pengalaman Anda menggunakan MyKost..." style="min-height: 100px;"></textarea>
+
+                <button type="submit">BAYAR & SELESAI</button>
+            </form>
+
+            <div class="nav-links">
+                <a href="/messages">← Tanya Agen Budi Lagi</a>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+<div class="footer-text">&copy; 2026 Software Engineering - Kelompok 8</div>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<div style="max-width: 350px; margin: 40px auto; background: #fff; padding: 40px 20px; font-family: 'Courier New', Courier, monospace; box-shadow: 0 0 20px rgba(0,0,0,0.1); border-top: 10px solid #1DB954;">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="margin: 0; font-size: 1.5rem;">MYKOST RECEIPT</h1>
+        <p style="font-size: 0.8rem;">THANKS FOR RENTING!</p>
+    </div>
+    <p style="font-size: 0.8rem;">ORDER #{{ struk.no_transaksi }}<br>DATE: {{ struk.tanggal }}</p>
+    <hr style="border: none; border-top: 1px dashed #000;">
+    <table style="width: 100%; font-size: 0.9rem; line-height: 2;">
+        <tr><td>GUEST:</td><td style="text-align: right;">{{ struk.nama_user }}</td></tr>
+        <tr><td>ITEM:</td><td style="text-align: right;">KOST MONTHLY</td></tr>
+        <tr><td>METHOD:</td><td style="text-align: right;">{{ struk.metode }}</td></tr>
+    </table>
+    <hr style="border: none; border-top: 1px dashed #000;">
+    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; margin-top: 10px;">
+        <span>TOTAL</span>
+        <span>Rp {{ struk.total }}</span>
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+        <img src="https://bwipjs-api.metafloor.com/?bcid=code128&text={{ struk.no_transaksi }}&scale=2" style="width: 150px;">
+        <a href="/progress" style="display: block; margin-top: 20px; background: #000; color: #fff; padding: 12px; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 800; border-radius: 5px;">TRACK PROGRESS</a>
+    </div>
+</div>

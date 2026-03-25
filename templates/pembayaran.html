@@ -1,0 +1,16 @@
+<div style="max-width: 450px; margin: 60px auto; font-family: 'Poppins', sans-serif; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.08);">
+    <h3>Konfirmasi Pembayaran</h3>
+    <p>Agen: <strong>{{ agen.nama }}</strong></p>
+    <div style="display: flex; justify-content: space-between; margin: 20px 0; border-top: 1px dashed #eee; padding-top: 20px;">
+        <span>Sewa Kost 1 Bulan</span>
+        <strong>Rp {{ harga }}</strong>
+    </div>
+    <form action="/proses-bayar" method="POST">
+        <label style="display: block; font-weight: 600; margin-bottom: 10px;">Metode Pembayaran</label>
+        <select name="metode_pembayaran" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 20px;">
+            <option value="Dana">DANA / OVO</option>
+            <option value="Transfer Bank">Transfer BCA</option>
+        </select>
+        <button type="submit" style="width: 100%; padding: 15px; background: #1DB954; color: white; border: none; border-radius: 30px; font-weight: 800; cursor: pointer;">BAYAR SEKARANG</button>
+    </form>
+</div>

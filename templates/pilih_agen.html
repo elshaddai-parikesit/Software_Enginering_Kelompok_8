@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Pilih Agen - MyKost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="background-color: #FFFDF9; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px;">
+
+    <div style="max-width: 600px; margin: 50px auto;">
+        <h2 style="text-align: center; font-weight: 700;">Pilih Agen <span style="color: #FF8C42;">Pendamping</span></h2>
+        <p style="text-align: center; color: #666; margin-bottom: 40px;">Agen akan membantu proses survei dan serah terima kunci.</p>
+
+        {% for agen in agen_list %}
+        <div style="display: flex; align-items: center; background: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;">
+            <img src="{{ agen.foto }}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin-right: 20px; border: 2px solid #FF8C42; padding: 2px;">
+            <div style="flex-grow: 1;">
+                <h4 style="margin: 0; font-size: 1.1rem; color: #333;">{{ agen.nama }}</h4>
+                <p style="color: #666; font-size: 0.85rem; margin: 5px 0;">⭐ {{ agen.rating }} | Spesialis {{ agen.spesialis }}</p>
+                <span style="font-size: 0.75rem; background: #f0f0f0; padding: 2px 8px; border-radius: 4px; color: #888;">Online</span>
+            </div>
+            <a href="/pembayaran/{{ kost_id }}/{{ agen.id }}" 
+            style="background: #333; color: white; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s;">
+            Pilih
+            </a>
+        </div>
+        {% endfor %}
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="javascript:history.back()" style="color: #999; text-decoration: none; font-size: 0.9rem;">← Kembali ke daftar kost</a>
+        </div>
+    </div>
+
+</body>
+</html>
