@@ -1,0 +1,19 @@
+{
+    "admin": {
+        "password": "123",
+        "full_name": "Administrator",
+        "username": "admin",
+        "role": "Pencari Kost"
+    },
+    "1": {
+        "password": "1",
+        "full_name": "1",
+        "username": "1",
+        "role": "Pencari Kost"
+    },
+    "2": {
+        "password": "2",
+        "full_name": "2",
+        "role": "Pencari Kost"
+    }
+}

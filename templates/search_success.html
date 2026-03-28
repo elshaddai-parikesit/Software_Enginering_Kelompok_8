@@ -19,50 +19,48 @@
         .kost-card {
             display: flex;
             background: white;
-            border-radius: 16px;
+            border-radius: 20px;
             margin-bottom: 25px;
             overflow: hidden;
             border: 1px solid #eee;
             transition: 0.3s;
-            height: 245px; 
+            height: 260px; 
+            position: relative;
         }
-        .kost-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .kost-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
         
         .img-container { width: 30%; position: relative; }
         .info-container { 
-            width: 45%; padding: 20px; border-right: 1px dashed #ddd; 
+            width: 45%; padding: 25px; border-right: 1px dashed #ddd; 
             display: flex; flex-direction: column; justify-content: space-between;
         }
         .map-container { width: 25%; background: #f9f9f9; position: relative; z-index: 1; }
         
-        .price-tag { font-size: 1.3rem; font-weight: 800; color: #333; }
+        .heart-btn {
+            position: absolute; top: 15px; right: 15px; background: white; border: none;
+            border-radius: 50%; width: 35px; height: 35px; display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 5;
+        }
+        .heart-btn svg { fill: #ccc; transition: 0.3s; width: 20px; height: 20px; }
+        .heart-btn.active svg { fill: #FF4D4D; }
+
+        .price-tag { font-size: 1.4rem; font-weight: 800; color: #333; }
         .badge-type { 
-            display: inline-block; padding: 4px 10px; border-radius: 6px; 
+            display: inline-block; padding: 4px 12px; border-radius: 8px; 
             font-size: 0.7rem; font-weight: 700; text-transform: uppercase; 
-            background: #f0f0f0; color: #666;
         }
 
         .btn-pilih {
-            display: block;
-            text-align: center;
-            background-color: #333;
-            color: #ffffff !important;
-            padding: 12px 0;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            margin-top: 10px;
-            border: none;
-            cursor: pointer;
+            display: block; text-align: center; background-color: #333;
+            color: #ffffff !important; padding: 14px 0; border-radius: 12px;
+            text-decoration: none; font-weight: 700; font-size: 0.9rem;
+            transition: 0.3s; margin-top: 10px; border: none;
         }
         .btn-pilih:hover {
             background-color: #FF8C42;
-            box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 140, 66, 0.3);
         }
-
-        span.lokasi-text { color: #FF8C42; }
     </style>
 </head>
 <body>
@@ -71,36 +69,42 @@
     <div class="logo">MYKOST<span style="color: #FF8C42;">.ID</span></div>
     <div style="display: flex; gap: 20px; align-items: center;">
         <span style="font-size: 0.9rem; font-weight: 600;">📍 {{ lokasi }}</span>
-        <a href="/preferences" style="color: #333; text-decoration: none; font-size: 0.85rem; border: 1.5px solid #333; padding: 6px 18px; border-radius: 20px;">Cari Lagi</a>
+        <a href="/preferences" style="color: #333; text-decoration: none; font-size: 0.85rem; border: 2.5px solid #333; padding: 8px 22px; border-radius: 25px; font-weight: 700;">Ganti Lokasi</a>
     </div>
 </nav>
 
 <div class="container" style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
-    <h2 style="margin-bottom: 5px; font-weight: 800; font-size: 2rem;">Kost Pilihan di <span class="lokasi-text">{{ lokasi }}</span></h2>
-    <p style="color: #888; margin-bottom: 30px;">Ditemukan {{ kost_data|length }} properti yang sesuai kriteria Anda.</p>
+    <h2 style="margin-bottom: 5px; font-weight: 800; font-size: 2.2rem;">Kost Terbaik di <span style="color: #FF8C42;">{{ lokasi }}</span></h2>
+    <p style="color: #888; margin-bottom: 30px;">Halo <strong>{{ user.full_name }}</strong>, kami menemukan {{ kost_data|length }} pilihan untukmu.</p>
 
     {% for kost in kost_data %}
     <div class="kost-card">
+        <button class="heart-btn" onclick="toggleFavorite(this)">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </button>
+
         <div class="img-container" style="background-image: url('{{ kost.image }}'); background-size: cover; background-position: center;">
-            <div style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.75); color: white; padding: 5px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 600;">
-                Tersedia
+            <div style="position: absolute; bottom: 15px; left: 15px; background: #FF8C42; color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">
+                Sisa 2 Kamar
             </div>
         </div>
 
         <div class="info-container">
             <div>
-                <span class="badge-type" style="background: #e8f5e9; color: #2e7d32;">Terverifikasi</span>
-                <h3 style="margin: 10px 0 5px 0; font-size: 1.2rem; color: #333; font-weight: 700;">{{ kost.nama }}</h3>
-                <p style="color: #777; font-size: 0.85rem; margin-bottom: 5px;">📍 {{ kost.alamat }}</p>
-                <p style="color: #999; font-size: 0.8rem; margin: 0;">Fasilitas: WiFi, AC, Laundry</p>
+                <span class="badge-type" style="background: #e8f5e9; color: #2e7d32;">✓ Terverifikasi</span>
+                <h3 style="margin: 12px 0 6px 0; font-size: 1.3rem; color: #333; font-weight: 800;">{{ kost.nama }}</h3>
+                <p style="color: #777; font-size: 0.85rem; margin-bottom: 8px;">📍 {{ kost.alamat }}</p>
+                <p style="color: #555; font-size: 0.85rem; margin: 0; background: #f0f0f0; padding: 5px 10px; border-radius: 8px; display: inline-block;">
+                    {{ kost.fasilitas }}
+                </p>
             </div>
             
             <div>
                 <div class="price-tag">
-                    Rp {{ kost.harga }} <span style="font-size: 0.8rem; font-weight: 400; color: #888;">/ bulan</span>
+                    Rp {{ kost.harga }} <span style="font-size: 0.85rem; font-weight: 400; color: #888;">/ bulan</span>
                 </div>
-                <a href="{{ url_for('pilih_agen', kost_id=kost.id) }}" class="btn-pilih">
-                    ⚡ PILIH KOST INI
+                <a href="{{ url_for('pilih_agen', kost_id=kost['id']) }}" class="btn-pilih">
+                    ⚡ PILIH KOST SEKARANG
                 </a>
             </div>
         </div>
@@ -112,23 +116,28 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+    function toggleFavorite(btn) { btn.classList.toggle('active'); }
+
     const locations = [
         [-6.2383, 106.9756], [-6.2410, 106.9921], [-6.2550, 107.0110], 
-        [-6.2210, 106.9650], [-6.2610, 106.9850], [-6.2300, 107.0001],
-        [-6.2450, 106.9550], [-6.2100, 106.9990], [-6.2700, 107.0200]
+        [-6.2210, 106.9650], [-6.2610, 106.9850], [-6.2300, 107.0001]
     ];
 
     document.addEventListener('DOMContentLoaded', function() {
         {% for kost in kost_data %}
             var map = L.map('map-{{ loop.index }}', {
-                zoomControl: false,
-                attributionControl: false,
-                dragging: false,
-                scrollWheelZoom: false
+                zoomControl: false, attributionControl: false,
+                dragging: false, scrollWheelZoom: false, doubleClickZoom: false
             }).setView(locations[{{ loop.index0 }} % locations.length], 15);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker(locations[{{ loop.index0 }} % locations.length]).addTo(map);
+            
+            var orangeIcon = L.divIcon({
+                html: '<div style="background-color: #FF8C42; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 8px rgba(255,140,66,0.5);"></div>',
+                className: 'custom-div-icon', iconSize: [14, 14], iconAnchor: [7, 7]
+            });
+
+            L.marker(locations[{{ loop.index0 }} % locations.length], {icon: orangeIcon}).addTo(map);
         {% endfor %}
     });
 </script>

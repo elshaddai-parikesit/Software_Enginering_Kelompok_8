@@ -2,109 +2,186 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>MyKost - Cari Kost Bekasi Terbaik</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Sewa Kost, Coliving, Apartemen - MyKost.ID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #FFFDF9; font-family: 'Poppins', sans-serif; margin: 0; color: #333; }
+        
+        /* NAVBAR */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 60px; background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-weight: 800; color: #333; font-size: 1.6rem; text-decoration: none; }
+        .nav-links a { text-decoration: none; color: #666; margin-left: 25px; font-size: 0.9rem; font-weight: 500; }
+        
+        /* HERO & SEARCH BAR (Ala Gambar 2) */
+        .hero { position: relative; padding: 120px 20px; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600') center/cover; color: white; text-align: center; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); }
+        .hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
+        .hero h1 { font-size: 3rem; font-weight: 800; margin: 0; }
+        
+        .search-box { display: flex; background: white; padding: 10px; border-radius: 50px; margin-top: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .search-box input, .search-box select { flex: 1; border: none; padding: 15px 20px; outline: none; font-family: inherit; font-size: 0.95rem; border-right: 1px solid #ddd; }
+        .search-box button { background: #00A693; color: white; border: none; padding: 15px 35px; border-radius: 50px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+
+        /* TAB KATEGORI */
+        .tabs { display: flex; justify-content: center; max-width: 1400px; margin: 0 auto; background: white; border-radius: 15px 15px 0 0; transform: translateY(-20px); z-index: 10; position: relative; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+        .tab-btn { flex: 1; text-align: center; padding: 20px; font-weight: 700; color: #666; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #00A693; border-bottom: 3px solid #00A693; background: #F8FDFD; border-radius: 15px 0 0 0; }
+
+        /* LAYOUT UTAMA */
+        .container { max-width: 1400px; margin: 20px auto 80px; padding: 0 20px; }
+        .section-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; }
+
+        /* PROMO HORIZONTAL SCROLL */
+        .scroll-horizontal { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 20px; scroll-snap-type: x mandatory; }
+        .scroll-horizontal::-webkit-scrollbar { height: 8px; }
+        .scroll-horizontal::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .promo-card { flex: 0 0 400px; scroll-snap-align: start; border-radius: 15px; overflow: hidden; position: relative; }
+        .promo-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; }
+
+        /* GRID KOST (6 Kolom) */
+        .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
+        .kost-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; }
+        .kost-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .img-wrap { position: relative; height: 160px; }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .img-wrap .badge { position: absolute; top: 10px; left: 10px; background: #1A3C40; color: white; padding: 5px 10px; font-size: 0.7rem; font-weight: 700; border-radius: 5px; }
+        .card-body { padding: 15px; }
+        .card-body h4 { margin: 5px 0; font-size: 0.95rem; font-weight: 700; }
+        .card-body p { margin: 2px 0; font-size: 0.75rem; color: #666; }
+        .price { margin-top: 15px !important; font-size: 0.8rem !important; }
+        .price strong { font-size: 1rem; color: #333; }
+
+        /* GRID TESTIMONI (5 Kolom x 2 Baris) */
+        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 20px; }
+        .testi-card { background: #FAFAFA; padding: 20px; border-radius: 12px; border: 1px solid #eee; }
+
+        /* LOGIN FORM */
+        .login-box { max-width: 400px; margin: 80px auto; padding: 30px; border-radius: 15px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee; }
+
+        /* FOOTER KORPORAT */
+        footer { background: #1A1A1A; color: #f4f4f4; padding: 80px 0 40px 0; margin-top: 50px; }
+        .footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; padding: 0 20px; }
+        .footer-col h4 { margin-bottom: 25px; font-size: 1.1rem; }
+        .footer-col ul { list-style: none; padding: 0; margin: 0; }
+        .footer-col ul li { margin-bottom: 12px; font-size: 0.85rem; color: #AAA; }
+    </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">MYKOST.ID</div>
-    <div>
-        <a href="#rekomendasi">Cari Kost</a>
-        <a href="#fitur">Fitur</a>
-        <a href="/register" style="color: var(--primary-orange);">Daftar</a>
+    <a href="/" class="logo">MYKOST<span style="color:#00A693;">.ID</span></a>
+    <div class="nav-links">
+        <a href="/">Sewa</a>
+        <a href="#">Kerjasama MyKost</a>
+        <a href="#">Tentang MyKost</a>
+        {% if user %}
+            <span style="margin-left:20px; font-weight:700;">👤 {{ user.full_name }}</span>
+            <a href="/logout" style="color: red; margin-left: 10px;">Logout</a>
+        {% else %}
+            <a href="#login" style="margin-left:20px; font-weight:700;">Masuk / Daftar</a>
+        {% endif %}
     </div>
 </nav>
 
-<section class="hero">
-    <div class="hero-text">
-        <h1>Temukan <span>Kost Nyaman</span><br>di Kota Bekasi</h1>
-        <p>Ribuan pilihan kost strategis dekat kampus & kantor.</p>
+<div class="hero">
+    <div class="hero-content">
+        <h1>Kost, Coliving, Apartemen</h1>
+        <p style="font-size: 1.2rem; margin-top: 10px;">Sewa hunian impian untuk setiap fase kehidupan</p>
+        <div class="search-box">
+            <input type="text" placeholder="📍 Cari lokasi, nama gedung atau landmark">
+            <input type="date">
+            <select>
+                <option>🏠 Semua tipe</option>
+                <option>Kost</option>
+                <option>Apartemen</option>
+            </select>
+            <button>Cari Hunian</button>
+        </div>
+    </div>
+</div>
+
+<div class="tabs">
+    <div class="tab-btn active">🏠 Kost Coliving</div>
+    <div class="tab-btn">🏢 Apartemen</div>
+</div>
+
+<div class="container">
+    <h2 class="section-title">Promo Spesial</h2>
+    <div class="scroll-horizontal">
+        {% for p in promo %}
+        <div class="promo-card">
+            <img src="{{ p.img }}" alt="Promo">
+        </div>
+        {% endfor %}
     </div>
 
-    <div class="auth-card">
-        <h3>Masuk ke Akun</h3>
-        <p style="font-size: 0.8rem; color: #888; margin-bottom: 20px;">Selamat datang kembali di MyKost!</p>
-        
+    <h2 class="section-title" style="margin-top: 50px;">Rekomendasi Untukmu</h2>
+    <div class="grid-6">
+        {% for k in kosts %}
+        <a href="/pembayaran/{{ k.id }}/1" style="text-decoration: none; color: inherit;">
+            <div class="kost-card">
+                <div class="img-wrap">
+                    <span class="badge">mykost</span>
+                    <img src="{{ k.img }}" alt="Kost">
+                </div>
+                <div class="card-body">
+                    <p style="color: #666; font-size: 0.7rem;">🏠 Coliving</p>
+                    <h4>{{ k.nama }}</h4>
+                    <p>{{ k.lokasi }}</p>
+                    <p style="margin-top: 8px;">🚶 {{ k.jarak }}</p>
+                    <p class="price">mulai dari <strong>Rp{{ k.harga }}</strong> /bulan</p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title" style="margin-top: 60px;">Apa Kata Mereka?</h2>
+    <div class="grid-5">
+        {% for t in testimoni %}
+        <div class="testi-card">
+            <div style="font-weight: 700; font-size: 0.9rem;">{{ t.nama }}</div>
+            <div style="font-size: 0.75rem; color: #00A693; margin-bottom: 10px;">{{ t.peran }}</div>
+            <p style="font-size: 0.8rem; color: #555; line-height: 1.5; margin: 0;">"{{ t.teks }}"</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not user %}
+    <div class="login-box" id="login">
+        <h3 style="text-align: center; margin-top: 0;">Masuk Akun</h3>
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div style="color: {% if category=='danger' %}red{% else %}green{% endif %}; font-size: 0.8rem; margin-bottom: 10px;">
-                {{ message }}
-              </div>
-            {% endfor %}
-          {% endif %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="color: {% if category == 'success' %}green{% else %}red{% endif %}; font-size: 0.8rem; text-align: center; margin-bottom: 10px;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
-
         <form action="/auth" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit" class="btn-primary">MASUK SEKARANG</button>
+            <input type="text" name="username" placeholder="Username" style="width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd;" required>
+            <input type="password" name="password" placeholder="Password" style="width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd;" required>
+            <button type="submit" style="width: 100%; padding: 15px; background: #00A693; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">MASUK</button>
         </form>
-        <div style="margin-top: 15px; font-size: 0.8rem; text-align: center;">
-            <a href="/forgot-password" style="color: #999;">Lupa Password?</a>
-        </div>
+        <p style="text-align: center; font-size: 0.85rem; margin-top: 15px;">Belum punya akun? <a href="/register" style="color: #00A693; font-weight: 600;">Daftar di sini</a></p>
     </div>
-</section>
-
-<section id="rekomendasi" class="section">
-    <h2>Rekomendasi Kost <span>Populer</span></h2>
-    <div class="grid">
-        <div class="card">
-            <div class="card-img">🏠</div>
-            <div class="card-content">
-                <span class="badge">Putra / Putri</span>
-                <h4 style="margin: 10px 0;">Kost Bekasi Barat Indah</h4>
-                <p style="color: #777; font-size: 0.9rem;">Bekasi Barat, Dekat Mall</p>
-                <p style="color: var(--primary-orange); font-weight: 800; margin-top: 10px;">Rp 1.200.000 / bln</p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-img">🏢</div>
-            <div class="card-content">
-                <span class="badge">Eksklusif</span>
-                <h4 style="margin: 10px 0;">Kost Unisma Ceria</h4>
-                <p style="color: #777; font-size: 0.9rem;">Bekasi Timur, Dekat Kampus</p>
-                <p style="color: var(--primary-orange); font-weight: 800; margin-top: 10px;">Rp 1.500.000 / bln</p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-img">🏡</div>
-            <div class="card-content">
-                <span class="badge">Campur</span>
-                <h4 style="margin: 10px 0;">Wisma Kelompok 8</h4>
-                <p style="color: #777; font-size: 0.9rem;">Harapan Indah, Bekasi</p>
-                <p style="color: var(--primary-orange); font-weight: 800; margin-top: 10px;">Rp 900.000 / bln</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="fitur" class="section" style="background: #FFF;">
-    <h2 style="text-align: center;">Mengapa Menggunakan MyKost?</h2>
-    <div class="grid">
-        <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 15px;">🔍</div>
-            <h4>Pencarian Cepat</h4>
-            <p style="font-size: 0.9rem; color: #666;">Filter kost berdasarkan harga dan fasilitas.</p>
-        </div>
-        <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 15px;">💳</div>
-            <h4>Bayar Online</h4>
-            <p style="font-size: 0.9rem; color: #666;">Transaksi aman dengan berbagai metode bayar.</p>
-        </div>
-        <div style="text-align: center; padding: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 15px;">💬</div>
-            <h4>Chat Pemilik</h4>
-            <p style="font-size: 0.9rem; color: #666;">Tanya jawab langsung dengan pemilik kost.</p>
-        </div>
-    </div>
-</section>
+    {% endif %}
+</div>
 
 <footer>
-    <p>&copy; 2026 Software Engineering - Kelompok 8. Project Mata Kuliah Web Development.</p>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Tenant</h4><ul><li>Kost</li><li>Apartemen</li><li>Community</li></ul>
+        </div>
+        <div class="footer-col">
+            <h4>Kerjasama MyKost</h4><ul><li>Coliving</li><li>Build to Rent</li><li>MyKost for Business</li><li>Corporate Subscription</li></ul>
+        </div>
+        <div class="footer-col">
+            <h4>Tentang MyKost</h4><ul><li>Tentang Kami</li><li>Komitmen ESG</li><li>Karir</li><li>Pusat Bantuan</li></ul>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4><ul><li style="color:white; font-weight:700;">+62 811-900-87829</li><li>info@mykost.id</li><li style="margin-top:15px; color:#666;">Jam Operasional:</li><li>Senin - Jumat: 10.00 - 19.00</li><li>Sabtu - Minggu: 10.30 - 17.00</li></ul>
+        </div>
+    </div>
 </footer>
-
 </body>
 </html>

@@ -1,16 +1,161 @@
-<div style="max-width: 450px; margin: 60px auto; font-family: 'Poppins', sans-serif; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.08);">
-    <h3>Konfirmasi Pembayaran</h3>
-    <p>Agen: <strong>{{ agen.nama }}</strong></p>
-    <div style="display: flex; justify-content: space-between; margin: 20px 0; border-top: 1px dashed #eee; padding-top: 20px;">
-        <span>Sewa Kost 1 Bulan</span>
-        <strong>Rp {{ harga }}</strong>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice - MyKost.ID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #FFFDF9; font-family: 'Poppins', sans-serif; margin: 0; color: #333; }
+        
+        /* NAVBAR (Konsisten) */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 60px; background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-weight: 800; color: #333; font-size: 1.6rem; text-decoration: none; }
+        .logo span { color: #FF8C42; }
+        .nav-links a { text-decoration: none; color: #666; margin-left: 25px; font-size: 0.9rem; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: #FF8C42; }
+
+        .container { max-width: 1000px; margin: 50px auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; padding: 0 20px; min-height: 60vh; }
+
+        /* RECEIPT & TRACKING KARTU */
+        .card { background: white; padding: 35px; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .receipt-line { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.95rem; }
+        .total-box { background: #FFF9F5; padding: 20px; border-radius: 15px; margin: 25px 0; border: 1px solid #FFE8D6; }
+        .btn-pay { width: 100%; padding: 16px; background: #333; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-pay:hover { background: #FF8C42; }
+
+        /* FOOTER KORPORAT (Konsisten) */
+        footer { background: #1A1A1A; color: #f4f4f4; padding: 80px 0 40px 0; margin-top: 100px; }
+        .footer-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; padding: 0 20px; }
+        .footer-col h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; font-weight: 700; }
+        .footer-col ul { list-style: none; padding: 0; margin: 0; }
+        .footer-col ul li { margin-bottom: 12px; font-size: 0.85rem; color: #AAA; cursor: pointer; transition: 0.3s; }
+        .footer-col ul li:hover { color: #FF8C42; }
+        .footer-bottom { max-width: 1100px; margin: 60px auto 0; padding: 20px; border-top: 1px solid #333; text-align: center; font-size: 0.8rem; color: #666; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="logo">MYKOST<span>.ID</span></a>
+    <div class="nav-links">
+        <a href="/">Beranda</a>
+        <a href="/search-kost">Cari Kost</a>
+        <a href="#">Bantuan</a>
+        <span style="margin-left:20px; font-weight:700; background:#f0f0f0; padding:8px 15px; border-radius:10px;">👤 {{ user.full_name }}</span>
     </div>
-    <form action="/proses-bayar" method="POST">
-        <label style="display: block; font-weight: 600; margin-bottom: 10px;">Metode Pembayaran</label>
-        <select name="metode_pembayaran" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 20px;">
-            <option value="Dana">DANA / OVO</option>
-            <option value="Transfer Bank">Transfer BCA</option>
-        </select>
-        <button type="submit" style="width: 100%; padding: 15px; background: #1DB954; color: white; border: none; border-radius: 30px; font-weight: 800; cursor: pointer;">BAYAR SEKARANG</button>
-    </form>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h3 style="margin-top:0; font-weight:800; letter-spacing:0.5px;">Ringkasan <span style="color:#FF8C42;">Pembayaran</span></h3>
+        <p style="color:#999; font-size:0.8rem;">No. Invoice: #TRX-{{ kost_id }}{{ agen.id }}26</p>
+        <hr style="border:none; border-top:2px dashed #eee; margin:25px 0;">
+        
+        <div class="receipt-line">
+            <span style="color:#666;">Unit Kost Terpilih</span> 
+            <strong>Kost Exclusive #{{ kost_id }}</strong>
+        </div>
+        <div class="receipt-line">
+            <span style="color:#666;">Biaya Sewa 1 Bulan</span> 
+            <strong>Rp {{ harga }}</strong>
+        </div>
+        <div class="receipt-line">
+            <span style="color:#666;">Pendampingan Agen ({{ agen.nama }})</span> 
+            <span style="color:#2ecc71; font-weight: 700;">GRATIS</span>
+        </div>
+        
+        <div class="total-box">
+            <div style="display:flex; justify-content:space-between; font-size:1.3rem; font-weight:800; color:#333;">
+                <span>Total Bayar</span>
+                <span style="color:#FF8C42;">Rp {{ harga }}</span>
+            </div>
+        </div>
+
+        <form action="/" method="GET" onsubmit="alert('Pembayaran Berhasil! Tim Kelompok 8 akan memverifikasinya.')">
+            <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:10px;">Pilih Metode Pembayaran:</label>
+            <select style="width:100%; padding:14px; border-radius:10px; border:2px solid #eee; margin-bottom:20px; font-family:inherit;">
+                <option>Virtual Account BCA</option>
+                <option>Qris (Gopay/Ovo/Dana)</option>
+                <option>Transfer Bank Mandiri</option>
+            </select>
+            <button type="submit" class="btn-pay">KONFIRMASI PEMBAYARAN</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h4 style="margin-top:0; font-weight: 800;">Status Booking</h4>
+        <div style="border-left: 3px solid #FF8C42; padding-left: 25px; margin-left: 10px; margin-top: 25px;">
+            <div style="position: relative; margin-bottom: 30px;">
+                <div style="position: absolute; left: -34px; top: 0; width: 15px; height: 15px; background: #FF8C42; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #FF8C42;"></div>
+                <strong style="display:block; font-size:0.95rem;">Booking Diajukan</strong>
+                <small style="color:#888;">Menunggu konfirmasi pembayaran Anda.</small>
+            </div>
+            <div style="position: relative;">
+                <div style="position: absolute; left: -34px; top: 0; width: 15px; height: 15px; background: #ddd; border-radius: 50%; border: 3px solid white;"></div>
+                <strong style="display:block; font-size:0.95rem; color:#aaa;">Verifikasi Pembayaran</strong>
+                <small style="color:#ccc;">Proses pengecekan saldo otomatis.</small>
+            </div>
+        </div>
+
+        <hr style="margin:35px 0 25px; border:none; border-top:1px solid #eee;">
+        
+        <h4 style="margin:0 0 15px 0;">Butuh Bantuan?</h4>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <img src="https://i.pravatar.cc/150?u={{ agen.id }}" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #25D366; padding: 2px;">
+            <div>
+                <p style="margin:0; font-weight:700;">{{ agen.nama }}</p>
+                <p style="margin:0; font-size:0.8rem; color:#2ecc71;">Agen Siap Membantu</p>
+            </div>
+        </div>
+        <a href="https://wa.me/{{ agen.wa }}?text=Halo%20{{ agen.nama }},%20saya%20sudah%20booking%20kost%20id%20{{ kost_id }}" style="display:block; text-align:center; background:#25D366; color:white; padding:14px; border-radius:12px; text-decoration:none; font-weight:700; transition:0.3s;" onmouseover="this.style.background='#1eb954'" onmouseout="this.style.background='#25D366'">
+            💬 Chat via WhatsApp
+        </a>
+    </div>
 </div>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Tenant</h4>
+            <ul>
+                <li>Kost</li>
+                <li>Apartemen</li>
+                <li>Community</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Kerjasama MyKost</h4>
+            <ul>
+                <li>Coliving</li>
+                <li>Build to Rent</li>
+                <li>MyKost for Business</li>
+                <li>Corporate Subscription</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Tentang MyKost</h4>
+            <ul>
+                <li>Tentang Kami</li>
+                <li>Komitmen ESG</li>
+                <li>Karir</li>
+                <li>Pusat Bantuan</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+                <li style="color:white; font-weight:700;">+62 811-900-87829</li>
+                <li>info@mykost.id</li>
+                <li style="margin-top:15px; color:#666;">Jam Operasional:</li>
+                <li>Senin - Jumat: 10.00 - 19.00</li>
+                <li>Sabtu - Minggu: 10.30 - 17.00</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 MyKost.ID by Kelompok 8 Software Engineering. All rights reserved.
+    </div>
+</footer>
+
+</body>
+</html>
