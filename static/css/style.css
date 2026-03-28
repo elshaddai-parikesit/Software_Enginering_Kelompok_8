@@ -126,3 +126,42 @@ footer strong { color: white; }
     border-radius: 4px;
     font-weight: bold;
 }
+
+/* Container utama untuk pilihan fasilitas */
+.options-container {
+    max-height: 250px; /* Batas tinggi agar tidak kepanjangan */
+    overflow-y: auto;  /* Munculkan scrollbar jika lebih dari 250px */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+/* Desain tiap baris pilihan */
+.opt {
+    padding: 12px 15px;
+    margin-bottom: 5px;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+}
+
+/* Efek saat kursor diarahkan ke pilihan */
+.opt:hover {
+    background: #fff5f0; /* Warna orange sangat muda */
+    border-color: var(--primary-orange);
+    color: var(--primary-orange);
+    transform: translateX(5px); /* Geser sedikit ke kanan agar estetik */
+}
+
+/* Kustomisasi scrollbar agar lebih tipis & modern */
+.options-container::-webkit-scrollbar {
+    width: 6px;
+}
+.options-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}

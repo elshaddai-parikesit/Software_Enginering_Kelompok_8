@@ -4,64 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cari Kost Idaman - MyKost</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #FFFDF9; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-weight: 800; color: #333; font-size: 1.5rem; }
+        
+        .main-content { max-width: 650px; margin: 60px auto; padding: 0 20px; }
+        
+        .auth-card { width: 100%; padding: 40px; border-radius: 28px; background: white; box-shadow: 0 20px 40px rgba(0,0,0,0.06); border: 1px solid #F2F2F2; box-sizing: border-box; }
+        
+        .input-group { margin-bottom: 25px; position: relative; }
+        .input-label { display: block; font-weight: 600; margin-bottom: 12px; color: #444; font-size: 0.95rem; }
+        
+        .custom-input { width: 100%; height: 55px; padding: 0 20px; border: 2px solid #F0F0F0; border-radius: 16px; font-family: inherit; font-size: 1rem; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .custom-input:focus { border-color: #FF8C42; }
+
+        /* Style untuk dropdown list (DIPERBARUI) */
+        #dropdown-list { 
+            display: none; 
+            position: absolute; 
+            top: 60px; /* Disesuaikan agar pas di bawah input */
+            left: 0; 
+            width: 100%; 
+            background: white; 
+            border: 1px solid #EEE; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            z-index: 100; 
+            max-height: 250px; /* Batas tinggi agar tidak menutupi tombol */
+            overflow-y: auto;  /* Fitur scroll */
+        }
+        
+        .opt { padding: 12px 20px; cursor: pointer; transition: 0.2s; border-bottom: 1px solid #F9F9F9; font-size: 0.95rem; }
+        .opt:hover { background-color: #FFF9F5; color: #FF8C42; transform: translateX(5px); }
+        .opt:last-child { border-bottom: none; }
+
+        /* Scrollbar kustom agar terlihat modern */
+        #dropdown-list::-webkit-scrollbar { width: 6px; }
+        #dropdown-list::-webkit-scrollbar-thumb { background: #EEE; border-radius: 10px; }
+
+        .btn-search { width: 100%; height: 60px; font-size: 1.1rem; border: none; border-radius: 18px; background: #333; color: white; cursor: pointer; font-weight: 700; transition: 0.3s; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-top: 10px; }
+        .btn-search:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); background: #444; }
+    </style>
 </head>
-<body style="background-color: #FFFDF9; font-family: 'Poppins', sans-serif;">
+<body>
 
 <nav>
-    <div class="logo">MYKOST.ID</div>
+    <div class="logo">MYKOST<span style="color: #FF8C42;">.ID</span></div>
     <div>
-        <a href="/profile" style="text-decoration: none; color: #333; margin-right: 20px;">Profil Saya</a>
-        <a href="/logout" style="color: #FF8C42; text-decoration: none; font-weight: 600;">Keluar</a>
+        <a href="/" style="text-decoration: none; color: #333; margin-right: 20px; font-size: 0.9rem;">Beranda</a>
+        <a href="/logout" style="color: #FF8C42; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Keluar</a>
     </div>
 </nav>
 
-<div class="container" style="max-width: 800px; margin: 60px auto; padding: 0 20px;">
+<div class="main-content">
     <div style="text-align: center; margin-bottom: 40px;">
-        <h1 style="font-size: 2.5rem; color: #333;">Cari Kost <span style="color: #FF8C42;">Idaman</span></h1>
-        <p style="color: #666;">Halo, <strong>{{ user.full_name }}</strong>! Sesuaikan kriteria kost yang Anda inginkan.</p>
+        <h1 style="font-size: 2.5rem; color: #333; font-weight: 800; margin: 0;">Cari Kost <span style="color: #FF8C42;">Idaman</span></h1>
+        <p style="color: #666; margin-top: 10px;">Halo, <strong>{{ user.full_name }}</strong>! Temukan hunian nyamanmu sekarang.</p>
     </div>
 
-    <div class="auth-card" style="width: 100%; max-width: 100%; padding: 40px; border-radius: 20px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+    <div class="auth-card">
         <form action="/search-kost" method="POST">
-            <div style="margin-bottom: 25px;">
-                <label style="display: block; font-weight: 600; margin-bottom: 10px;">Lokasi (Kota/Area)</label>
-                <input type="text" name="lokasi" placeholder="Misal: Bekasi Barat, Tambun, dsb..." required 
-                       style="width: 100%; padding: 14px; border: 1.5px solid #EAEAEA; border-radius: 12px; font-family: inherit;">
-                <small style="color: #999; font-size: 0.8rem; display: block; mt: 5px;">Contoh: Dekat Unisma, Harapan Indah</small>
+            
+            <div class="input-group">
+                <label class="input-label">📍 Lokasi Tujuan</label>
+                <input type="text" name="lokasi" placeholder="Misal: Bekasi Barat, Tambun, dsb..." required class="custom-input">
+                <small style="color: #BBB; font-size: 0.75rem; margin-top: 8px; display: block;">Contoh: Dekat Unisma, Harapan Indah</small>
             </div>
 
-            <div style="margin-bottom: 30px;">
-                <label style="display: block; font-weight: 600; margin-bottom: 15px;">Fasilitas Utama</label>
-                <select name="fasilitas" style="width: 100%; padding: 14px; border: 1.5px solid #EAEAEA; border-radius: 12px; background: white; font-family: inherit; cursor: pointer;">
-                    <option value="AC + Kamar Mandi Dalam">❄️ AC + Kamar Mandi Dalam</option>
-                    <option value="Wifi + Laundry">📶 Wifi + Laundry</option>
-                    <option value="Parkir Mobil">🚗 Parkir Mobil</option>
-                    <option value="Akses 24 Jam">🕒 Akses 24 Jam</option>
-                </select>
+            <div class="input-group">
+                <label class="input-label">✨ Fasilitas Utama</label>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <input type="text" id="fasilitas-input" name="fasilitas" placeholder="Pilih atau ketik fasilitas..." class="custom-input" autocomplete="off">
+                    <span style="position: absolute; right: 20px; color: #888; pointer-events: none; font-size: 0.8rem;">▼</span>
+                </div>
+
+                <div id="dropdown-list">
+                    <div class="opt" onclick="selectOpt('❄️ AC + 🚿 Kamar Mandi Dalam')">❄️ AC + Kamar Mandi Dalam</div>
+                    <div class="opt" onclick="selectOpt('📶 WiFi + 🧺 Cuci Gosok')">📶 WiFi + Cuci Gosok</div>
+                    <div class="opt" onclick="selectOpt('❄️ AC + 📺 Smart TV + 📶 WiFi')">❄️ AC + Smart TV + WiFi</div>
+                    <div class="opt" onclick="selectOpt('🚿 Water Heater + 🅿️ Parkir Motor')">🚿 Water Heater + Parkir Motor</div>
+                    <div class="opt" onclick="selectOpt('🛏️ Kasur + 🚪 Lemari + 🪟 Jendela')">🛏️ Kasur + Lemari + Jendela</div>
+                    <div class="opt" onclick="selectOpt('❄️ AC + 🧊 Kulkas Pribadi')">❄️ AC + Kulkas Pribadi</div>
+                    <div class="opt" onclick="selectOpt('💻 Meja Kerja + 💺 Kursi + 📶 WiFi')">💻 Meja Kerja + Kursi + WiFi</div>
+                    <div class="opt" onclick="selectOpt('🧹 Cleaning Service + ❄️ AC')">🧹 Cleaning Service + AC</div>
+                    <div class="opt" onclick="selectOpt('🔒 Access Card + 📹 CCTV + ❄️ AC')">🔒 Access Card + CCTV + AC</div>
+                    <div class="opt" onclick="selectOpt('🕒 Akses 24 Jam + 🚗 Parkir Mobil')">🕒 Akses 24 Jam + Parkir Mobil</div>
+                    <div class="opt" onclick="selectOpt('📱 Smart Lock + ❄️ AC + 📶 WiFi')">📱 Smart Lock + AC + WiFi</div>
+                    <div class="opt" onclick="selectOpt('🍳 Dapur Pribadi + 🚿 KM Dalam')">🍳 Dapur Pribadi + KM Dalam</div>
+                    <div class="opt" onclick="selectOpt('🌅 Balkon Pribadi + ❄️ AC')">🌅 Balkon Pribadi + AC</div>
+                    <div class="opt" onclick="selectOpt('🧺 Laundry Free + 🌬️ Kipas Angin')">🧺 Laundry Free + Kipas Angin</div>
+                    <div class="opt" onclick="selectOpt('✨ Full Furnished + 🧹 Cleaning')">✨ Full Furnished + Cleaning</div>
+                </div>
+                <p style="margin-top: 10px; color: #BBB; font-size: 0.75rem;">*Anda bebas mengetik kriteria tambahan di sini.</p>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <button type="submit" class="btn-primary" style="padding: 18px; font-size: 1.1rem; border: none; border-radius: 12px; background: #333; color: white; cursor: pointer; font-weight: 600; transition: 0.3s;">
-                    🔍 CARI KOST SEKARANG
-                </button>
-                
-                <a href="/" style="text-align: center; text-decoration: none; color: #999; font-size: 0.9rem; font-weight: 600; margin-top: 10px;">
-                    ← KEMBALI KE BERANDA
-                </a>
-            </div>
+            <button type="submit" class="btn-search">
+                🔍 CARI KOST SEKARANG
+            </button>
         </form>
     </div>
 
-    <div style="margin-top: 30px; text-align: center; background: #F4F4F4; padding: 15px; border-radius: 12px; color: #555; font-size: 0.85rem;">
-        Logged in as: <strong>{{ user.role }}</strong> | Username: <em>{{ user.username if user.username else 'admin' }}</em>
+    <div style="margin-top: 30px; text-align: center; color: #999; font-size: 0.85rem;">
+        Logged in as: <span style="color: #333; font-weight: 600;">{{ user.role }}</span>
     </div>
 </div>
 
-<footer style="margin-top: 100px; text-align: center; color: #BBB; font-size: 0.8rem; padding-bottom: 40px;">
-    &copy; 2026 Software Engineering - Kelompok 8 (Project MyKost)
-</footer>
+<script>
+    const input = document.getElementById('fasilitas-input');
+    const list = document.getElementById('dropdown-list');
+
+    // Klik input untuk buka dropdown
+    input.addEventListener('click', (e) => {
+        e.stopPropagation();
+        list.style.display = 'block';
+    });
+
+    // Fungsi pilih opsi
+    function selectOpt(val) {
+        input.value = val;
+        list.style.display = 'none';
+    }
+
+    // Klik di luar untuk tutup dropdown
+    document.addEventListener('click', () => {
+        list.style.display = 'none';
+    });
+
+    // Mencegah list tertutup saat men-scroll di dalamnya
+    list.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+</script>
 
 </body>
 </html>
